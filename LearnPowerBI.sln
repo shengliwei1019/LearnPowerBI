@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{4DF76451-A46A-4C0B-BE03-459FAAFA07E6}") = "LearnPowerQuery", "LearnPowerQuery\LearnPowerQuery.mproj", "{93AE9546-B9EC-4E40-97D9-B5CAD385973C}"
+Project("{4DF76451-A46A-4C0B-BE03-459FAAFA07E6}") = "LearnPowerQuery", "LearnPowerQuery\LearnPowerQuery.mproj", "{78F101C8-74C6-40D5-9554-48962A1A7720}"
 EndProject
-Project("{4DF76451-A46A-4C0B-BE03-459FAAFA07E6}") = "PowerQueryCodeSnippet", "PowerQueryCodeSnippet\PowerQueryCodeSnippet.mproj", "{D6F7236A-E910-4566-9531-9F2C15725C54}"
+Project("{4DF76451-A46A-4C0B-BE03-459FAAFA07E6}") = "PowerQueryCodeSnippet", "PowerQueryCodeSnippet\PowerQueryCodeSnippet.mproj", "{21E34A2C-41A3-444E-8A1F-FB86E39F4852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93AE9546-B9EC-4E40-97D9-B5CAD385973C}.Debug|x86.ActiveCfg = Debug|x86
-		{93AE9546-B9EC-4E40-97D9-B5CAD385973C}.Debug|x86.Build.0 = Debug|x86
-		{93AE9546-B9EC-4E40-97D9-B5CAD385973C}.Release|x86.ActiveCfg = Release|x86
-		{93AE9546-B9EC-4E40-97D9-B5CAD385973C}.Release|x86.Build.0 = Release|x86
-		{D6F7236A-E910-4566-9531-9F2C15725C54}.Debug|x86.ActiveCfg = Debug|x86
-		{D6F7236A-E910-4566-9531-9F2C15725C54}.Debug|x86.Build.0 = Debug|x86
-		{D6F7236A-E910-4566-9531-9F2C15725C54}.Release|x86.ActiveCfg = Release|x86
-		{D6F7236A-E910-4566-9531-9F2C15725C54}.Release|x86.Build.0 = Release|x86
+		{78F101C8-74C6-40D5-9554-48962A1A7720}.Debug|x86.ActiveCfg = Debug|x86
+		{78F101C8-74C6-40D5-9554-48962A1A7720}.Debug|x86.Build.0 = Debug|x86
+		{78F101C8-74C6-40D5-9554-48962A1A7720}.Release|x86.ActiveCfg = Release|x86
+		{78F101C8-74C6-40D5-9554-48962A1A7720}.Release|x86.Build.0 = Release|x86
+		{21E34A2C-41A3-444E-8A1F-FB86E39F4852}.Debug|x86.ActiveCfg = Debug|x86
+		{21E34A2C-41A3-444E-8A1F-FB86E39F4852}.Debug|x86.Build.0 = Debug|x86
+		{21E34A2C-41A3-444E-8A1F-FB86E39F4852}.Release|x86.ActiveCfg = Release|x86
+		{21E34A2C-41A3-444E-8A1F-FB86E39F4852}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
