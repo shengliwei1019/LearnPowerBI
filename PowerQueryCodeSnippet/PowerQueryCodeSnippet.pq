@@ -36,7 +36,7 @@ PowerQueryCodeSnippet.Icons = [
 ];
 
 
-//PowerQueryCodeSnippet.Table.GetFileData("c:\工作簿1.xlsx","Sheet1")
+//PowerQueryCodeSnippet.Table.GetExcelFileData("c:\工作簿1.xlsx","Sheet1")
 shared PowerQueryCodeSnippet.Table.GetExcelFileData = (filePath as text, itemName as text) as table =>
     /*
         A2 = LEFT(CELL("filename",A2),FIND("[",CELL("filename",A2),1)-1)
@@ -48,7 +48,7 @@ shared PowerQueryCodeSnippet.Table.GetExcelFileData = (filePath as text, itemNam
     in
         Data_Sheet;
 
-//PowerQueryCodeSnippet.Table.DateTimeDimension("2017-12-18", "2017-12-20", 1, "6:30", 30)
+//PowerQueryCodeSnippet.Table.DateTimeDimension("2007-7-29", "2007-7-30", 1, "6:30", 30)
 shared PowerQueryCodeSnippet.Table.DateTimeDimension = (StartDate as text, EndDate as text, BaseWeek as number, BaseTime as text, IntervalMinutes as number) as table =>
     /*
         StartDate = Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"StartDate"],
@@ -86,4 +86,71 @@ shared PowerQueryCodeSnippet.Table.DateTimeDimension = (StartDate as text, EndDa
         更改的类型4 = Table.TransformColumnTypes(DateTimeArea,{{"TimeArea", type text}, {"DateTimeArea", type text}, {"DayInWeek", Int64.Type}})
     in 
         更改的类型4;
+
+//PowerQueryCodeSnippet.Text.GPSToBaiDuConverterCoords("121.56551075326223", "31.343495341386173")
+shared PowerQueryCodeSnippet.Text.GPSToBaiDuConverterCoords = (Longitude as text,Latitude as text) as text =>
+    let
+        Source = Json.Document(Web.Contents("http://api.map.baidu.com/geoconv/v1/?coords=" & Longitude & "," & Latitude & "&from=1&to=5&ak=ntp9QXogEsqnow9S0j2j8KGdduEEBkOE")),
+        result = Source[result]{0},
+        location = Text.From(Record.FieldValues(result){0}) & "," & Text.From(Record.FieldValues(result){1})
+    in
+        location;
+
+//PowerQueryCodeSnippet.Number.BaiDuMapGetGeocodeDistance("121.576257,31.347452", "121.576598,31.350898")
+shared PowerQueryCodeSnippet.Number.BaiDuMapGetGeocodeDistance = (sLongitude_sLatitude as text, eLongitude_eLatitude as text) as number =>
+    let
+        lonRes = 102900,
+        latRes = 110000,
+
+        sLongitude = Number.From(Text.Start(sLongitude_sLatitude,Text.PositionOf(sLongitude_sLatitude, ",") - 1)),
+        sLatitude = Number.From(Text.End(sLongitude_sLatitude,Text.Length(sLongitude_sLatitude) - Text.PositionOf(sLongitude_sLatitude, ",") - 1)),
+
+        eLongitude = Number.From(Text.Start(eLongitude_eLatitude,Text.PositionOf(eLongitude_eLatitude, ",") - 1)),
+        eLatitude = Number.From(Text.End(eLongitude_eLatitude, Text.Length(eLongitude_eLatitude) - Text.PositionOf(eLongitude_eLatitude, ",") - 1)),
+	
+        result = Number.Round(Number.Sqrt(Number.Abs(sLongitude - eLongitude) * lonRes * Number.Abs(sLongitude-eLongitude) * lonRes + Number.Abs(sLatitude - eLatitude) * latRes * Number.Abs(sLatitude - eLatitude) * latRes), 2)
+    in
+        result;
+
+//PowerQueryCodeSnippet.Text.DateTimeRegion(DateTime.From("2007-7-29 22:35:00"), Time.From("0:00"), 30)
+shared PowerQueryCodeSnippet.Text.DateTimeRegion = (sDateTime as datetime, baseTime as time, intervalHours as number) as text =>
+    let
+	    baseDateTime = if Time.From(sDateTime) > baseTime then DateTime.From(Date.From(sDateTime) & baseTime) 
+					    else DateTime.From(Date.AddDays(Date.From(sDateTime),-1) & baseTime),
+
+	    dtList = if intervalHours = 30 then List.DateTimes(baseDateTime, 24 / 0.5 + 1, #duration(0, 0, intervalHours, 0))
+				    else List.DateTimes(baseDateTime, 24 / intervalHours + 1, #duration(0, intervalHours, 0, 0)),
+
+	    lPositions = List.Accumulate(
+                                        dtList
+                                        , 0
+                                        , (s, c) =>
+                                            if Value.Compare(sDateTime, c) > 0
+                                            then s + 1
+                                            else s
+                                    ),
+		
+	    result = if lPositions > 0 then 
+                    Text.From(Date.From(sDateTime)) & " " & Text.From(DateTime.Time(dtList{lPositions - 1})) & "~" & Text.From(DateTime.Time(dtList{lPositions} - #duration(0, 0, 1, 0)))
+                 else null
+
+    /*		
+	    result = if lPositions > 0 then 
+                    Text.From(Date.From(sDateTime)) & " " & Time.ToText(DateTime.Time(dtList{lPositions - 1}), "hh:mm") & "~" & Time.ToText(DateTime.Time(dtList{lPositions} - #duration(0, 0, 1, 0)), "hh:mm")
+                 else null
+
+	    rTimeRegion = 
+		    List.Accumulate(
+                dtList
+                , [sTimeR = #datetime, eTimeR = #datetime]
+                , (s, c) =>
+				    [sTimeR = if Value.Compare(sDateTime, c) > 0 then c else s[sTimeR],
+				     eTimeR = if Value.Compare(sDateTime, c) > 0 then c else s[eTimeR] + #duration(0, intervalHours - 1, 59, 0)]
+            ),
+		
+	    result = try Text.From(Date.From(sDateTime)) & " " & Text.From(DateTime.Time(rTimeRegion[sTimeR])) & "~" & Text.From(DateTime.Time(rTimeRegion[eTimeR])) otherwise null
+    */	
+
+    in
+	    result;
 

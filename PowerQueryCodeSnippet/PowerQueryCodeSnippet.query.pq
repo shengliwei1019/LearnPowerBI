@@ -2,6 +2,6 @@
 let
     //result = PowerQueryCodeSnippet.Contents()
 
-    result = PowerQueryCodeSnippet.Table.DateTimeDimension("2017-12-18", "2017-12-20", 5, "6:30", 30)
+    result = PowerQueryCodeSnippet.Table.DateTimeDimension("2007-7-29", "2007-7-30", 1, "6:30", 30)
 in
     result
