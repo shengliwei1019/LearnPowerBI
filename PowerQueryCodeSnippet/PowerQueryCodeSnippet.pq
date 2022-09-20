@@ -54,7 +54,7 @@ shared PowerQueryCodeSnippet.Table.DateTimeDimension = (StartDate as text, EndDa
         StartDate = Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"StartDate"],
         EndDate = Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"EndDate"] + Duration.From(1),
 	    BaseWeek = Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"BaseWeek"],
-        BaseTime = Duration.From(Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"BaseTime"]),
+        BaseTime = DateTime.From(Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"BaseTime"]),
         IntervalMinutes = Excel.CurrentWorkbook(){[Name="tDateTimePara"]}[Content]{0}[#"IntervalMinutes"],
     */
     let
@@ -81,8 +81,8 @@ shared PowerQueryCodeSnippet.Table.DateTimeDimension = (StartDate as text, EndDa
         InsertWeekStarting = Table.AddColumn(InsertDayName, "WeekStarting", each Date.StartOfWeek([WindowsDate],BaseWeek), type date),
         InsertWeekEnding = Table.AddColumn(InsertWeekStarting, "WeekEnding", each Date.EndOfWeek([WindowsDate],BaseWeek), type date),
         已添加索引 = Table.AddIndexColumn(InsertWeekEnding, "SORT", 1, 1),
-        TimeArea = Table.AddColumn(已添加索引, "TimeArea", each Text.From(Time.From([FirDateTime])) & "~" & Text.From(Time.From([SecDateTime]- #duration(0, 0, 1, 0)))),
-        DateTimeArea = Table.AddColumn(TimeArea, "DateTimeArea", each Text.From(Date.From([FirDateTime])) & " " & Text.From(DateTime.Time([FirDateTime])) & "~" & Text.From(DateTime.Time([SecDateTime])- #duration(0, 0, 1, 0))),
+        TimeArea = Table.AddColumn(已添加索引, "TimeArea", each Text.From(Time.From([FirDateTime])) & "-" & Text.From(Time.From([SecDateTime]- #duration(0, 0, 1, 0)))),
+        DateTimeArea = Table.AddColumn(TimeArea, "DateTimeArea", each Text.From(Date.From([FirDateTime])) & " " & Text.From(DateTime.Time([FirDateTime])) & "-" & Text.From(DateTime.Time([SecDateTime])- #duration(0, 0, 1, 0))),
         更改的类型4 = Table.TransformColumnTypes(DateTimeArea,{{"TimeArea", type text}, {"DateTimeArea", type text}, {"DayInWeek", Int64.Type}})
     in 
         更改的类型4;
@@ -131,12 +131,12 @@ shared PowerQueryCodeSnippet.Text.DateTimeRegion = (sDateTime as datetime, baseT
                                     ),
 		
 	    result = if lPositions > 0 then 
-                    Text.From(Date.From(sDateTime)) & " " & Text.From(DateTime.Time(dtList{lPositions - 1})) & "~" & Text.From(DateTime.Time(dtList{lPositions} - #duration(0, 0, 1, 0)))
+                    Text.From(Date.From(sDateTime)) & " " & Text.From(DateTime.Time(dtList{lPositions - 1})) & "-" & Text.From(DateTime.Time(dtList{lPositions} - #duration(0, 0, 1, 0)))
                  else null
 
     /*		
 	    result = if lPositions > 0 then 
-                    Text.From(Date.From(sDateTime)) & " " & Time.ToText(DateTime.Time(dtList{lPositions - 1}), "hh:mm") & "~" & Time.ToText(DateTime.Time(dtList{lPositions} - #duration(0, 0, 1, 0)), "hh:mm")
+                    Text.From(Date.From(sDateTime)) & " " & Time.ToText(DateTime.Time(dtList{lPositions - 1}), "hh:mm") & "-" & Time.ToText(DateTime.Time(dtList{lPositions} - #duration(0, 0, 1, 0)), "hh:mm")
                  else null
 
 	    rTimeRegion = 
@@ -148,7 +148,7 @@ shared PowerQueryCodeSnippet.Text.DateTimeRegion = (sDateTime as datetime, baseT
 				     eTimeR = if Value.Compare(sDateTime, c) > 0 then c else s[eTimeR] + #duration(0, intervalHours - 1, 59, 0)]
             ),
 		
-	    result = try Text.From(Date.From(sDateTime)) & " " & Text.From(DateTime.Time(rTimeRegion[sTimeR])) & "~" & Text.From(DateTime.Time(rTimeRegion[eTimeR])) otherwise null
+	    result = try Text.From(Date.From(sDateTime)) & " " & Text.From(DateTime.Time(rTimeRegion[sTimeR])) & "-" & Text.From(DateTime.Time(rTimeRegion[eTimeR])) otherwise null
     */	
 
     in
